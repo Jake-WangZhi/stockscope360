@@ -25,7 +25,7 @@ export const useDefaultDisplayInfo = ({
           ","
         )}&currency=${currency}&frequency=${frequency}`
       ),
-    enabled: !!start_date && !!end_date && stockIds.length > 0 && !!currency && !!frequency,
+    enabled: !!start_date && !!end_date && stockIds.length > 0 && !!currency && !!frequency && !stockIds,
   });
 
   return {
