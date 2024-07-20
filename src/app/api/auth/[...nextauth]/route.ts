@@ -6,6 +6,7 @@ interface AuthOptions {
   session: {
     strategy: SessionStrategy;
   };
+  secret: string;
   callbacks?: {
     redirect: ({ baseUrl }: { baseUrl: string }) => Promise<string>;
   };
@@ -21,6 +22,7 @@ const authOptions: AuthOptions = {
   session: {
     strategy: "jwt" as SessionStrategy,
   },
+  secret: process.env.NEXTAUTH_SECRET || "default_secret",
   callbacks: {
     async redirect({ baseUrl }: { baseUrl: string }) {
       return baseUrl;
