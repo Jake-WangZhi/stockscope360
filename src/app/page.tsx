@@ -8,8 +8,19 @@ import DefaultAndFavoriteToggle from "@/components/DefaultFavoriteToggle";
 import FrequencyButton from "@/components/FrequencyButton";
 import StockChart from "@/components/StockChart";
 import { SettingsProvider } from "@/context/SettingsContext";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [stockIds, setStockIds] = useState<string[]>(["1", "2", "3", "4", "5"]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("stockIds")) {
+      const initialStockIds = [1, 2, 3, 4, 5];
+      localStorage.setItem("stockIds", JSON.stringify(initialStockIds));
+    }
+    setStockIds(JSON.parse(localStorage.getItem("stockIds") || "[]"));
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center p-8 bg-gray-400">
       <SettingsProvider>
@@ -36,7 +47,7 @@ export default function Home() {
         </div>
         <div className="relative flex place-items-center justify-between w-full">
           <div className="flex w-1/2 h-[480px] items-center justify-center bg-white">
-            <StockChart />
+            <StockChart stockIds={stockIds} setStockIds={setStockIds} />
           </div>
           <div className="flex w-1/2 h-[480px] justify-center">
             <StockDataGrid />
@@ -44,7 +55,10 @@ export default function Home() {
         </div>
         <div>
           <CalendarButton />
-          <DefaultAndFavoriteToggle />
+          <DefaultAndFavoriteToggle
+            stockIds={stockIds}
+            setStockIds={setStockIds}
+          />
         </div>
         <div>
           <FrequencyButton />

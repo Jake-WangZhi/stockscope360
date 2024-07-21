@@ -1,11 +1,19 @@
 import { Switch, FormControlLabel } from "@mui/material";
-import { useState, useEffect, } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useSettingsContext } from "@/context/SettingsContext";
 import { useDefaultDisplayInfo } from "@/hooks/useDefaultDisplayInfo";
 import { useFavoriteDisplayInfo } from "@/hooks/useFavoriteDisplayInfo";
 import moment from "moment";
 
-export default function DefaultAndFavoriteToggle() {
+interface Props {
+  stockIds: Array<string>;
+  setStockIds: Dispatch<SetStateAction<string[]>>;
+}
+
+export default function DefaultAndFavoriteToggle({
+  stockIds,
+  setStockIds,
+}: Props) {
   const {
     dates,
     isFavorite,
@@ -20,16 +28,6 @@ export default function DefaultAndFavoriteToggle() {
     moment("2019-01-02").format("YYYY-MM-DD")
   );
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
-
-  const [stockIds, setStockIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!localStorage.getItem("stockIds")) {
-      const initialStockIds = [1, 2, 3, 4, 5];
-      localStorage.setItem("stockIds", JSON.stringify(initialStockIds));
-    }
-    setStockIds(JSON.parse(localStorage.getItem("stockIds") || "[]"));
-  }, []);
 
   const { defaultRefetch } = useDefaultDisplayInfo({
     start_date: startDate,
@@ -71,7 +69,7 @@ export default function DefaultAndFavoriteToggle() {
       setStockIds(stockIdsArray);
       setIsStockIdsChanged(false);
     }
-  }, [isStockIdsChanged, setIsStockIdsChanged]);
+  }, [isStockIdsChanged, setIsStockIdsChanged, setStockIds]);
 
   useEffect(() => {
     defaultRefetch();
@@ -79,7 +77,7 @@ export default function DefaultAndFavoriteToggle() {
 
   useEffect(() => {
     if (email) setIsFavorite(true);
-  }, [email, setIsFavorite]); 
+  }, [email, setIsFavorite]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,7 +20,12 @@ import { useFavoriteDisplayInfo } from "@/hooks/useFavoriteDisplayInfo";
 import { useSettingsContext } from "@/context/SettingsContext";
 import { CircularProgress } from "@mui/material";
 
-export default function StockChart() {
+interface Props {
+  stockIds: Array<string>;
+  setStockIds: Dispatch<SetStateAction<string[]>>;
+}
+
+export default function StockChart({ stockIds, setStockIds }: Props) {
   const {
     dates,
     isFavorite,
@@ -32,7 +37,7 @@ export default function StockChart() {
     email,
   } = useSettingsContext();
   const { startDate, endDate } = dates;
-  const [stockIds, setStockIds] = useState<string[]>([]);
+
   const [chartData, setChartData] = useState<ChartData>({
     labels: [],
     datasets: [],
@@ -44,7 +49,7 @@ export default function StockChart() {
 
   useEffect(() => {
     setStockIds(JSON.parse(localStorage.getItem("stockIds") || "[]"));
-  }, [isStockIdsChanged]);
+  }, [isStockIdsChanged, setStockIds]);
 
   const formattedStartDate = startDate.format("YYYY-MM-DD");
   const formattedEndDate = endDate.format("YYYY-MM-DD");
