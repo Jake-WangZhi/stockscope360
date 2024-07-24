@@ -5,6 +5,7 @@ import { QCProvider } from "./provider";
 import { Session } from "next-auth";
 import { headers } from "next/headers";
 import AuthContext from "./AuthContext";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,7 +41,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthContext session={session}>
-          <QCProvider>{children}</QCProvider>
+          <QCProvider>
+            {children} <Analytics />
+          </QCProvider>
         </AuthContext>
       </body>
     </html>
